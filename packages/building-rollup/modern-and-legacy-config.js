@@ -16,6 +16,8 @@ const getWorkboxConfig = require('@open-wc/building-utils/get-workbox-config');
 const production = !process.env.ROLLUP_WATCH;
 const prefix = '[owc-building-rollup]';
 
+const DEFAULT_DEDUPE_MODULES = ['lit-html'];
+
 /**
  * Function which creates a config so that we can create a modern and a legacy config
  * with small alterations.
@@ -27,6 +29,7 @@ function createConfig(_options, legacy) {
     outputDir: 'dist',
     extensions: DEFAULT_EXTENSIONS,
     indexHTMLPlugin: {},
+    dedupeModules: [],
     ..._options,
     plugins: {
       indexHTML: _options.input.endsWith('.html'),
@@ -70,6 +73,7 @@ function createConfig(_options, legacy) {
       // resolve bare import specifiers
       resolve({
         extensions: options.extensions,
+        dedupe: [...DEFAULT_DEDUPE_MODULES, ...(options.dedupeModules || [])],
       }),
 
       // run code through babel

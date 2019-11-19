@@ -14,6 +14,8 @@ const getWorkboxConfig = require('@open-wc/building-utils/get-workbox-config');
 
 const production = !process.env.ROLLUP_WATCH;
 
+const DEFAULT_DEDUPE_MODULES = ['lit-html'];
+
 /**
  * @typedef {ConfigOptions}
  * @param {*} _options
@@ -25,6 +27,7 @@ module.exports = function createBasicConfig(_options) {
     outputDir: 'dist',
     extensions: DEFAULT_EXTENSIONS,
     indexHTMLPlugin: {},
+    dedupeModules: [],
     ..._options,
     plugins: {
       indexHTML: _options.input.endsWith('.html'),
@@ -60,6 +63,7 @@ module.exports = function createBasicConfig(_options) {
       // resolve bare import specifiers
       resolve({
         extensions: options.extensions,
+        dedupe: [...DEFAULT_DEDUPE_MODULES, ...(options.dedupeModules || [])],
       }),
 
       // run code through babel
